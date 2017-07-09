@@ -151,7 +151,7 @@ export class Repository {
         return Repository._db.collection(collectionName).deleteMany(filter);
     }
     public static exists<T>(collectionName: string, filter: {}): Promise<boolean> {
-        return new Promise<boolean>((resolve: (v: boolean) => {}, reject) => {
+        return new Promise<boolean>((resolve, reject) => {
             Repository._db.collection(collectionName).count(filter)
                 .then((count) => resolve(count > 0))
                 .catch((error) => reject(error));
