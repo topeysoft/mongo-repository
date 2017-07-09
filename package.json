@@ -11,5 +11,9 @@
     "url": "https://topeysoftvss.visualstudio.com/repository/_git/mongo-repository"
   },
   "author": "Temitope Adeyeri",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "^2.2.30",
+    "shortid": "^2.2.8"
+  }
 }

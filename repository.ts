@@ -1,6 +1,5 @@
 import { MongoClient, MongoError, Db, InsertOneWriteOpResult, InsertWriteOpResult, UpdateWriteOpResult, DeleteWriteOpResultObject, FindOneOptions, ObjectID, Collection, CollectionAggregationOptions } from 'mongodb';
-import { sanitizeModelName } from '../sanitizers/name.sanitizer';
-import { BaseModel } from "../models/base.model";
+import { sanitizeModelName } from './sanitizers/name.sanitizer';
 const shortid = require('shortid');
 export class Repository {
     /**
@@ -94,7 +93,7 @@ export class Repository {
             }
 
             try {
-                var validDoc:BaseModel = Object.assign(new BaseModel(), doc);
+                var validDoc = Object.assign({}, doc);
                 validDoc._id = new ObjectID();
                 validDoc.id = validDoc.id=validDoc._id.toHexString();
                 collection.insertOne(validDoc).then(result => {
