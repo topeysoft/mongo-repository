@@ -13,6 +13,7 @@
   "author": "Temitope Adeyeri",
   "license": "ISC",
   "dependencies": {
+    "gridfs": "^1.0.0",
     "mongodb": "^2.2.30",
     "shortid": "^2.2.8"
   }
