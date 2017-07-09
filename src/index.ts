@@ -1,5 +1,6 @@
 import { MongoClient, MongoError, Db, InsertOneWriteOpResult, InsertWriteOpResult, UpdateWriteOpResult, DeleteWriteOpResultObject, FindOneOptions, ObjectID, Collection, CollectionAggregationOptions } from 'mongodb';
 import { sanitizeModelName } from './sanitizers/name.sanitizer';
+declare var require;
 const shortid = require('shortid');
 export class Repository {
     /**
