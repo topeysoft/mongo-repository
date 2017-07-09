@@ -15,6 +15,7 @@
   "dependencies": {
     "gridfs": "^1.0.0",
     "mongodb": "^2.2.30",
+    "path": "^0.12.7",
     "shortid": "^2.2.8"
   }
 }

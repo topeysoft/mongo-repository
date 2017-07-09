@@ -149,7 +149,7 @@ export class Repository {
         return Repository.getMany<T>(`${bucketName}.files`, query);
     }
     
-    public static createFileFromPath<T>(path: string | Buffer, folderAndFilename, extraData?:any, bucketName?:string): Promise<T> {
+    public static createFileFromPath<T>(path: any, folderAndFilename, extraData?:any, bucketName?:string): Promise<T> {
         bucketName=bucketName||Repository._bucketName;
         return new Promise((resolve, reject) => {
             let query = { filename: folderAndFilename };
@@ -158,7 +158,7 @@ export class Repository {
                 if(!folderAndFilename)  throw new Error('Output file name must be specified');
                 if (!path) throw new Error('File name was null');
                 folderAndFilename=folderAndFilename.split('?')[0];
-                Repository.beginUploadProcess(path, folderAndFilename, bucketName).then((fileInfo:{_id:ObjectID}) => {
+                Repository.beginUploadProcess(path, folderAndFilename, bucketName).then((fileInfo:any) => {
                    if(fileInfo && extraData){
                        let id=fileInfo._id.toHexString();
                         Repository.updateFileMetaData(id, extraData, bucketName).then((info)=>{
@@ -181,7 +181,7 @@ export class Repository {
 
     public static updateFileMetaData<T>(folderAndFilename_or_id, data, bucketName?:string): Promise<T> {
           bucketName=bucketName||Repository._bucketName;
-        return new Promise((resolve, reject) => {
+        return new Promise<any>((resolve, reject) => {
             let file_id = folderAndFilename_or_id;
             let query: any = { filename: file_id };
             try {
@@ -189,7 +189,7 @@ export class Repository {
             } catch (error) { }
             try {
                 console.log('Metadata', data, query, bucketName);
-                Repository.updateOne<any>(`${bucketName}.files`, query,  data ).then(updated => {
+                Repository.updateOne<any>(`${bucketName}.files`, query,  data ).then((updated:any) => {
                     Repository.getOneFileInfo(query, bucketName).then(fileInfo => {
                         resolve(fileInfo);
                     }).catch(err => {
@@ -221,7 +221,7 @@ export class Repository {
                         console.log('Unable to rename file with id',  id);
                         return reject(err);
                     }
-                    Repository.getOneFileInfo(query, bucketName).then(fileInfo => {
+                    Repository.getOneFileInfo<any>(query, bucketName).then(fileInfo => {
                         resolve(fileInfo);
                     }).catch(err => {
                         console.log('Unable to get detail after renaming file with id', query._id);
@@ -237,7 +237,7 @@ export class Repository {
     }
     public static deleteFile<T>(id, bucketName?:string): Promise<T> {
         bucketName=bucketName||Repository._bucketName;
-        return new Promise((resolve, reject) => {
+        return new Promise<any>((resolve, reject) => {
             let file_id = id;
             let query: any = { _id: file_id };
             try {
