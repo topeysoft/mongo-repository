@@ -2,6 +2,10 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { MongoClient, MongoError, Db, InsertOneWriteOpResult, InsertWriteOpResult, UpdateWriteOpResult, DeleteWriteOpResultObject, FindOneOptions, CollectionAggregationOptions, Collection, GridFSBucket, GridFSBucketReadStream, ObjectID } from 'mongodb';
 import { RepoQueryParams } from './repo-query-params';
+import { sanitizeModelName } from "./sanitizers/name.sanitizer";
+import { BaseModel } from "./models/base-model";
+const shortid = require('shortid');
+
 declare var require;
 
 let Grid = require('gridfs');
@@ -67,10 +71,47 @@ export class Repository {
         var cursor = Repository._db.collection(collectionName).aggregate(query, options);
         return cursor.toArray();
     }
-    public static insertOne<T>(collectionName: string, doc: T, createIndexes?: Object[]): Promise<InsertOneWriteOpResult> {
-        var collection: Collection = Repository._db.collection(collectionName);
-        if (createIndexes && createIndexes.length > 1) { collection.createIndexes(createIndexes) }
-        return collection.insertOne(doc);
+
+     public static insertOne<T>(collectionName: string, doc: T | any, options?: { setDate?: boolean, preserveName?: boolean, autoGenerateName?: boolean }): Promise<any> {
+        return new Promise((resolve, reject) => {
+            options = Object.assign({ setDate: true, autoGenerateName: true, preserveName: false }, options);
+            if (!doc) reject('Invalid data');
+            if (options.setDate) {
+                doc['created'] = new Date();
+                doc['modified'] = new Date();
+            }
+            var collection: Collection = Repository._db.collection(collectionName);
+            if (collectionName === 'users') {
+                collection.createIndex({ "email": 1 }, { unique: true });
+            } else {
+                collection.createIndex({ "name": 1 }, { unique: true });
+            }
+            if (!options.preserveName) {
+                if (doc.name) {
+                    if (!doc.display_name) doc.display_name = doc.name;
+                    doc.name = sanitizeModelName(doc.name);
+                } else {
+                    if (options.autoGenerateName) doc.name = shortid.generate();
+                }
+            }
+
+            try {
+                var validDoc:BaseModel = Object.assign(new BaseModel(), doc);
+                validDoc._id = new ObjectID();
+                validDoc.id = validDoc.id=validDoc._id.toHexString();
+                collection.insertOne(validDoc).then(result => {
+                    resolve(result);
+                })
+                    .catch(err => {
+                        var defaultMessage = 'Invalid model';
+                        var message = err.message.indexOf('name_1 dup key') !== -1 ? 'Name must be unique' : defaultMessage;
+                        var message = err.message.indexOf('email_1 dup key') !== -1 ? 'Email must be unique' : defaultMessage;
+                        ; reject(message);
+                    })
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
     public static createIndexes(collectionName: string, indexes: any): Promise<InsertWriteOpResult> {
         return Repository._db.collection(collectionName).createIndexes(indexes);
