@@ -72,7 +72,8 @@ export class Repository {
         return cursor.toArray();
     }
 
-     public static insertOne<T>(collectionName: string, doc: T | any, options?: { setDate?: boolean, preserveName?: boolean, autoGenerateName?: boolean }): Promise<any> {
+
+     public static insertOne<T>(collectionName: string, doc: T | any, options?: { setDate?: boolean, preserveName?: boolean, autoGenerateName?: boolean, createIndexes?: Object[] }): Promise<any> {
         return new Promise((resolve, reject) => {
             options = Object.assign({ setDate: true, autoGenerateName: true, preserveName: false }, options);
             if (!doc) reject('Invalid data');
@@ -80,6 +81,7 @@ export class Repository {
                 doc['created'] = new Date();
                 doc['modified'] = new Date();
             }
+            if (options.createIndexes && options.createIndexes.length > 1) { collection.createIndexes(options.createIndexes) }
             var collection: Collection = Repository._db.collection(collectionName);
             if (collectionName === 'users') {
                 collection.createIndex({ "email": 1 }, { unique: true });
