@@ -307,6 +307,16 @@ export class Repository {
         }, initDir);
     }
 
+    public static validateObjectId(id: string): ObjectID | any {
+        var object_id: ObjectID = null;
+        try {
+            object_id = new ObjectID(id);
+        } catch (e) {
+            console.log('Unable to parse object id', e.message);
+            throw new Error('Invalid id');
+        }
+        return object_id;
+    }
     public static parseFields(fields: string): Object {
         var fieldsObject: any = {};
         if (fields) {
