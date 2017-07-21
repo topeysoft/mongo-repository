@@ -294,5 +294,16 @@ export class Repository {
             return curDir;
         }, initDir);
     }
+
+    public static parseFields(fields: string): Object {
+        var fieldsObject: any = {};
+        if (fields) {
+            var fieldsArray = fields.split(',');
+            fieldsArray.forEach((f) => {
+                fieldsObject[f] = true;
+            });
+        }
+        return fieldsObject;
+    }
 }
 
