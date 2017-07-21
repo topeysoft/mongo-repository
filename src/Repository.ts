@@ -44,7 +44,7 @@ export class Repository {
             Repository._db.collection(collectionName).findOne(query, options)
                 .then(data => {
                     //data = Object.assign(new BaseModel(), data);
-                    if(data.id)data.id=data._id.toHexString();
+                    if(data && data.id)data.id=data._id.toHexString();
                     resolve(data);
                 })
                 .catch(err => {
