@@ -28,7 +28,7 @@ class Repository {
             options.fields = fields;
             Repository._db.collection(collectionName).findOne(query, options)
                 .then(data => {
-                if (data.id)
+                if (data)
                     data.id = data._id.toHexString();
                 resolve(data);
             })
