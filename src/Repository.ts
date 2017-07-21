@@ -114,9 +114,9 @@ export class Repository {
 
 
     //  GRID FS
-    public static getFileData<T>(query, tempFilePath, bucketName?:string): Promise<T> {
+    public static getFileData(query, tempFilePath, bucketName?:string): Promise<T> {
           bucketName=bucketName||Repository._bucketName;
-          return new Promise((resolve, reject) => {
+          return new Promise<any>((resolve, reject) => {
             Repository.getOneFileInfo(query, bucketName).then((info: any) => {
                 if (!info) return reject('File not found');
                 let tempFileName = path.join(tempFilePath, info.filename);
