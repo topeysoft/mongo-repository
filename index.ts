@@ -1,2 +1,2 @@
-export { Repository } from './Repository';
-export { RepoQueryParams } from './repo-query-params';
+export { Repository } from './src/Repository';
+export { RepoQueryParams } from './src/repo-query-params';
