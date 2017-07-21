@@ -2,9 +2,10 @@
   "name": "mongo-repository",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "scripts": {
-    "test": "mocha"
+    "run": "ts-node ./src/index.ts",
+    "prepublishOnly": "tsc -p ./ --outDir dist/"
   },
   "repository": {
     "type": "git",

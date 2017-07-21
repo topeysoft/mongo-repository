@@ -1,5 +1,5 @@
 import * as path from 'path';
-import * as fs from 'fs';
+const fs = require('fs');
 import { MongoClient, MongoError, Db, InsertOneWriteOpResult, InsertWriteOpResult, UpdateWriteOpResult, DeleteWriteOpResultObject, FindOneOptions, CollectionAggregationOptions, Collection, GridFSBucket, GridFSBucketReadStream, ObjectID } from 'mongodb';
 import { RepoQueryParams } from './repo-query-params';
 import { sanitizeModelName } from "./sanitizers/name.sanitizer";
