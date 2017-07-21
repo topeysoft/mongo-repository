@@ -33,8 +33,20 @@ export class Repository {
 
 
 
-    public static getOne<T>(collectionName: string, query): Promise<T> {
-        return Repository._db.collection(collectionName).findOne(query);
+   public static getOne<T>(collectionName: string, query: object = {}, fields: any = {}): Promise<T> {
+        return new Promise((resolve, reject) => {
+            var options: FindOneOptions = {};
+            options.fields = fields;
+            Repository._db.collection(collectionName).findOne(query, options)
+                .then(data => {
+                    //data = Object.assign(new BaseModel(), data);
+                    if(data.id)data.id=data._id.toHexString();
+                    resolve(data);
+                })
+                .catch(err => {
+                    reject(err);
+                });
+        });
     }
     public static getMany<T>(collectionName: string, queryParams: RepoQueryParams | any): Promise<T[]> {
         return Repository._db.collection(collectionName).find(queryParams.query, queryParams.fields, queryParams.skip, queryParams.limit).toArray();
