@@ -37,6 +37,9 @@ export class Repository {
 
 
 
+   public static getCollection(collectionName: string){
+        return Repository._db.collection(collectionName);
+    }
    public static getOne<T>(collectionName: string, query: object = {}, fields: any = {}): Promise<T> {
         return new Promise((resolve, reject) => {
             var options: FindOneOptions = {};
