@@ -22,6 +22,9 @@ class Repository {
         bucketName = bucketName || Repository._bucketName;
         return new mongodb_1.GridFSBucket(Repository._db, { bucketName: bucketName });
     }
+    static getCollection(collectionName) {
+        return Repository._db.collection(collectionName);
+    }
     static getOne(collectionName, query = {}, fields = {}) {
         return new Promise((resolve, reject) => {
             var options = {};

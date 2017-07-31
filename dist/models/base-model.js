@@ -1,7 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const bson_1 = require("bson");
+const shortid = require("shortid");
 class BaseModel {
+    constructor() {
+        this.unique_name = shortid();
+    }
     get id() {
         return this._id.toHexString();
     }
