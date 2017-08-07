@@ -9,7 +9,7 @@
     "build": "tsc -p ./ --outDir dist/",
     "git:add": "git add .",
     "git:commit": "git add . && git commit -am \"code update\"",
-    "git:push": "git push origin master && git push hub master",
+    "git:push": "git push origin master",
     "git:publish": "npm run build && npm run git:commit && npm run git:push"
   },
   "repository": {
