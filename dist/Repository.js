@@ -124,7 +124,7 @@ class Repository {
         delete doc['_id'];
         var update = { $set: doc };
         collection.updateOne(filter, update, options);
-        return collection.getOne(filter);
+        return collection.findOne(filter);
     }
     static updateMany(collectionName, filter, doc, options) {
         return Repository._db.collection(collectionName).updateMany(filter, doc);
