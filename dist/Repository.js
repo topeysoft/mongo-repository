@@ -123,8 +123,8 @@ class Repository {
             doc['last_modified'] = new Date().toISOString();
         delete doc['_id'];
         var update = { $set: doc };
-        collection.updateOne(filter, update, options);
-        return collection.findOne(filter);
+        const updateResult = collection.updateOne(filter, update, options);
+        return collection.findOne({ _id: updateResult.upsertedId });
     }
     static updateMany(collectionName, filter, doc, options) {
         return Repository._db.collection(collectionName).updateMany(filter, doc);
