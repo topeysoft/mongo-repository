@@ -133,7 +133,7 @@ export class Repository {
         delete doc['_id'];
         var update = { $set: doc };
         const updateResult = collection.updateOne(filter, update, options);
-        return collection.findOne({_id:updateResult.upsertedId});
+        return collection.findOne(filter);
     }
     // public static partiallyUpdate(collectionName: string, filter, update, options = {}, setDate = true, createIndexes?: Object[]): Promise<UpdateWriteOpResult> {
     //     var collection: Collection = Repository._db.collection(collectionName);
