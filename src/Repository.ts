@@ -105,7 +105,11 @@ export class Repository {
                 validDoc._id = new ObjectID();
                 validDoc.id = validDoc.id=validDoc._id.toHexString();
                 collection.insertOne(validDoc).then(result => {
-                    resolve(result);
+                    collection.findOne({_id:result.insertedId}).then((inserted)=>{
+                        resolve(inserted);
+                    }).catch((err)=>{
+                        resolve({_id:result.insertedId});
+                    })
                 })
                     .catch(err => {
                         var defaultMessage = 'Invalid model';
