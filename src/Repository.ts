@@ -130,13 +130,14 @@ export class Repository {
     }
 
 
-    public static updateOne<T>(collectionName: string, filter, doc: T, options = {}, setDate = true, createIndexes?: Object[]): Promise<UpdateWriteOpResult> {
+    public static updateOne<T>(collectionName: string, filter, doc: T, options = {}, setDate = true, createIndexes?: Object[]): Promise<any> {
         var collection: Collection = Repository._db.collection(collectionName);
         if (createIndexes && createIndexes.length > 1) { collection.createIndexes(createIndexes) }
         if (setDate) doc['last_modified'] = new Date().toISOString();
         delete doc['_id'];
         var update = { $set: doc };
-        return collection.updateOne(filter, update, options);
+        const updateResult = collection.updateOne(filter, update, options);
+        return collection.findOne(filter);
     }
     // public static partiallyUpdate(collectionName: string, filter, update, options = {}, setDate = true, createIndexes?: Object[]): Promise<UpdateWriteOpResult> {
     //     var collection: Collection = Repository._db.collection(collectionName);
